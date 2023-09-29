@@ -58,7 +58,7 @@
         document.getElementById("name").innerText = name;
         if(lat==0){
             findNearestBiergarten(latitude,longitude);
-            
+            init();
         }
         var len = Math.round(Math.sqrt((lat-mlat)**2+(lon-mlon)**2)*111*1000);
         document.getElementById("distance").innerText = len+"m";
@@ -155,9 +155,6 @@ setTimeout(getGPS,2000);
         );
       return Math.round(psi);
     }
-
-    setTimeout(
-    init,2000);
     </script>
     <style>
         .arrow{
