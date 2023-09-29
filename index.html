@@ -10,7 +10,12 @@
         var lat = 0;
         var lon = 0;
         var name = "";
+        var called = false;
         async function findNearestBiergarten(lat, lon, precision = 0.01) {
+          if(called){
+            return
+          }
+          called = true;
         const baseUrl = "https://nominatim.openstreetmap.org/search";
         const params = new URLSearchParams({
             format: "json",
@@ -57,8 +62,8 @@
         console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
         document.getElementById("name").innerText = name;
         if(lat==0){
-            findNearestBiergarten(latitude,longitude);
             init();
+            findNearestBiergarten(latitude,longitude);
         }
         var len = Math.round(Math.sqrt((lat-mlat)**2+(lon-mlon)**2)*111*1000);
         document.getElementById("distance").innerText = len+"m";
@@ -113,16 +118,6 @@ setTimeout(function strtcmps(){
     function handler(e) {
       compass = e.webkitCompassHeading || Math.abs(e.alpha - 360);
       compassCircle.style.transform = `translate(-50%, -50%) rotate(${-compass}deg)`;
-
-      // ±15 degree
-      if (
-        (pointDegree < Math.abs(compass) &&
-          pointDegree + 15 > Math.abs(compass)) ||
-        pointDegree > Math.abs(compass + 15) ||
-        pointDegree < Math.abs(compass)
-      ) {
-      } else if (pointDegree) {
-      }
     }
 
     let pointDegree;
