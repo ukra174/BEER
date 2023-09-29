@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIER</title>
+    <script>
+        var mlat = 0;
+        var mlon = 0;
+        var lat = 0;
+        var lon = 0;
+        var name = "";
+        async function findNearestBiergarten(lat, lon, precision = 0.01) {
+        const baseUrl = "https://nominatim.aaaaaaaopenstreetmap.org/search";
+        const params = new URLSearchParams({
+            format: "json",
+            q: "biergarten",
+            viewbox: `${lon - precision},${lat + precision},${lon + precision},${lat - precision}`,
+            bounded: 1,
+            limit: 1,
+        });
+
+        try {
+            const response = await fetch(`${baseUrl}?${params}`);
+
+            if (response.ok) {
+            const searchResults = await response.json();
+            var min = 999999;
+            for(const biergarten of searchResults){
+                var len = Math.sqrt(biergarten["lat"]**2+biergarten["lon"]**2);
+                if(len<min){
+                    lat = biergarten["lat"];
+                    lon = biergarten["lon"];
+                    min = len;
+                    name = biergarten["name"];
+                }
+            }
+            
+            console.log(searchResults);
+            //return searchResults;
+            } else {
+            console.error(`Request failed with status code ${response.status}`);
+            return [];
+            }
+        } catch (error) {
+            console.error(`Error occurred during the request: ${error}`);
+            return [];
+        }
+        }
+        function getGPS(){
+            if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        mlat = latitude;
+        mlon = longitude;
+        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+        document.getElementById("name").innerText = name;
+        if(lat==0){
+            findNearestBiergarten(latitude,longitude);
+            
+        }
+        var len = Math.round(Math.sqrt((lat-mlat)**2+(lon-mlon)**2)*111*1000);
+        document.getElementById("distance").innerText = len+"m";
+    });
+    } else {
+    console.log("Geolocation is not supported by this browser.");
+    
+}
+setTimeout(getGPS,500);
+        }
+        lat = 60;
+        lon = 20;
+        name = "Hof"
+        getGPS();
+
+
+
+        //compass
+
+        const compassCircle = document.getElementById("arrow");
+    const myPoint = document.querySelector(".my-point");
+    const startBtn = document.getElementById("arrow");
+    const isIOS =
+      navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
+      navigator.userAgent.match(/AppleWebKit/);
+
+    function init() {
+      //startBtn.addEventListener("click", startCompass);
+      startCompass();
+      navigator.geolocation.getCurrentPosition(locationHandler);
+
+      if (!isIOS) {
+        window.addEventListener("deviceorientationabsolute", handler, true);
+      }
+    }
+
+    function startCompass() {
+      if (isIOS) {
+        DeviceOrientationEvent.requestPermission()
+          .then((response) => {
+            if (response === "granted") {
+              window.addEventListener("deviceorientation", handler, true);
+            } else {
+              alert("has to be allowed!");
+            }
+          })
+          .catch(() => alert("not supported"));
+      }
+    }
+
+    function handler(e) {
+      compass = e.webkitCompassHeading || Math.abs(e.alpha - 360);
+      compassCircle.style.transform = `translate(-50%, -50%) rotate(${-compass}deg)`;
+
+      // ±15 degree
+      if (
+        (pointDegree < Math.abs(compass) &&
+          pointDegree + 15 > Math.abs(compass)) ||
+        pointDegree > Math.abs(compass + 15) ||
+        pointDegree < Math.abs(compass)
+      ) {
+      } else if (pointDegree) {
+      }
+    }
+
+    let pointDegree;
+
+    function locationHandler(position) {
+      const { latitude, longitude } = position.coords;
+      pointDegree = calcDegreeToPoint(latitude, longitude);
+
+      if (pointDegree < 0) {
+        pointDegree = pointDegree + 360;
+      }
+    }
+
+    function calcDegreeToPoint(latitude, longitude) {
+      // Qibla geolocation
+      const point = {
+        lat: 21.422487,
+        lng: 39.826206
+      };
+
+      const phiK = (point.lat * Math.PI) / 180.0;
+      const lambdaK = (point.lng * Math.PI) / 180.0;
+      const phi = (latitude * Math.PI) / 180.0;
+      const lambda = (longitude * Math.PI) / 180.0;
+      const psi =
+        (180.0 / Math.PI) *
+        Math.atan2(
+          Math.sin(lambdaK - lambda),
+          Math.cos(phi) * Math.tan(phiK) -
+            Math.sin(phi) * Math.cos(lambdaK - lambda)
+        );
+      return Math.round(psi);
+    }
+
+    setTimeout(
+    init,2000);
+    </script>
+    <style>
+        .arrow{
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            margin:auto;
+            height: 300pt;
+            width: 150pt;
+        }
+        .name{
+            position:absolute;
+            top:2%;
+            left:0;
+            right:0;
+            bottom:0;
+            margin:auto;
+            text-align: center;
+            font-size: 400%;
+        }
+        .distance{
+            position:absolute;
+            top:80%;
+            left:0;
+            right:0;
+            bottom:0;
+            margin:auto;
+            text-align: center;
+            font-size: 300%;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="name" id="name">test</h1>
+    <img id="arrow" class="arrow" src="arrow.png">
+    <h1 class="distance" id="distance">727m</h1>
+</body>
+</html>
