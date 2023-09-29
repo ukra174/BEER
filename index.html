@@ -81,13 +81,15 @@
 
 
         //compass
+
+        const isIOS =
+      navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
+      navigator.userAgent.match(/AppleWebKit/);
 setTimeout(function strtcmps(){
   const compassCircle = document.querySelector(".arrow");
     const myPoint = document.querySelector(".my-point");
     //const startBtn = document.getElementById("arrow");
-    const isIOS =
-      navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
-      navigator.userAgent.match(/AppleWebKit/);
+    
 },1000)
         
 
