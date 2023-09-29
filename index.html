@@ -76,13 +76,15 @@
 
 
         //compass
-
-        const compassCircle = document.querySelector(".arrow");
+setTimeout(function strtcmps(){
+  const compassCircle = document.querySelector(".arrow");
     const myPoint = document.querySelector(".my-point");
     //const startBtn = document.getElementById("arrow");
     const isIOS =
       navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
       navigator.userAgent.match(/AppleWebKit/);
+})
+        
 
     function init() {
       //startBtn.addEventListener("click", startCompass);
@@ -137,8 +139,8 @@
     function calcDegreeToPoint(latitude, longitude) {
       // Qibla geolocation
       const point = {
-        lat: 21.422487,
-        lng: 39.826206
+        lat: lat,
+        lng: lon
       };
 
       const phiK = (point.lat * Math.PI) / 180.0;
