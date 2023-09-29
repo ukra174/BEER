@@ -77,9 +77,9 @@
 
         //compass
 
-        const compassCircle = document.getElementById("arrow");
+        const compassCircle = document.querySelector(".arrow");
     const myPoint = document.querySelector(".my-point");
-    const startBtn = document.getElementById("arrow");
+    //const startBtn = document.getElementById("arrow");
     const isIOS =
       navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
       navigator.userAgent.match(/AppleWebKit/);
@@ -190,7 +190,7 @@
 </head>
 <body>
     <h1 class="name" id="name">test</h1>
-    <img id="arrow" class="arrow" src="arrow.png">
+    <img class="arrow" id="arrow" src="arrow.png">
     <h1 class="distance" id="distance">727m</h1>
 </body>
 </html>
