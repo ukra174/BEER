@@ -11,7 +11,7 @@
         var lon = 0;
         var name = "";
         var called = false;
-        async function findNearestBiergarten(lat, lon, precision = 0.01) {
+        async function findNearestBiergarten(lat, lon, precision = 0.04) {
           if(called){
             return
           }
@@ -88,7 +88,7 @@ setTimeout(function strtcmps(){
     const isIOS =
       navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
       navigator.userAgent.match(/AppleWebKit/);
-})
+},1000)
         
 
     function init() {
