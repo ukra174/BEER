@@ -67,12 +67,11 @@
     console.log("Geolocation is not supported by this browser.");
     
 }
-setTimeout(getGPS,2000);
         }
         //lat = 60;
         //lon = 20;
         //name = "Hof"
-        getGPS();
+        setInterval(getGPS,2000);
 
 
 
