@@ -60,17 +60,124 @@
       .start-btn {
         margin-bottom: auto;
       }
+      .arrow{
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            margin:auto;
+            height: 300pt;
+            width: 150pt;
+        }
+        .name{
+            position:absolute;
+            top:2%;
+            left:0;
+            right:0;
+            bottom:0;
+            margin:auto;
+            text-align: center;
+            font-size: 400%;
+        }
+        .distance{
+            position:absolute;
+            top:80%;
+            left:0;
+            right:0;
+            bottom:0;
+            margin:auto;
+            text-align: center;
+            font-size: 300%;
+        }
     </style>
   </head>
   <body>
+    <h1 class="name" id="name">Searching...</h1>
     <div class="compass">
       <div class="arrow"></div>
       <div class="compass-circle"></div>
       <div class="my-point"></div>
     </div>
+    <h1 class="name" id="name">Searching...</h1>
     <button class="start-btn">Start compass</button>
   </body>
   <script>
+
+var mlat = 0;
+        var mlon = 0;
+        var lat = 0;
+        var lon = 0;
+        var name = "Searching...";
+        var called = false;
+        async function findNearestBiergarten(lat, lon, precision = 0.04) {
+          if(called){
+            return
+          }
+          called = true;
+        const baseUrl = "https://nominatim.openstreetmap.org/search";
+        const params = new URLSearchParams({
+            format: "json",
+            q: "biergarten",
+            viewbox: `${lon - precision},${lat + precision},${lon + precision},${lat - precision}`,
+            bounded: 1,
+            limit: 1,
+        });
+
+        try {
+            const response = await fetch(`${baseUrl}?${params}`);
+
+            if (response.ok) {
+            const searchResults = await response.json();
+            var min = 999999;
+            for(const biergarten of searchResults){
+                var len = Math.sqrt(biergarten["lat"]**2+biergarten["lon"]**2);
+                if(len<min){
+                    lat = biergarten["lat"];
+                    lon = biergarten["lon"];
+                    min = len;
+                    name = biergarten["name"];
+                }
+            }
+            
+            console.log(searchResults);
+            //return searchResults;
+            } else {
+            console.error(`Request failed with status code ${response.status}`);
+            return [];
+            }
+        } catch (error) {
+            console.error(`Error occurred during the request: ${error}`);
+            return [];
+        }
+        }
+        function getGPS(){
+            if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        mlat = latitude;
+        mlon = longitude;
+        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+        document.getElementById("name").innerText = name;
+        if(lat==0){
+            init();
+            findNearestBiergarten(latitude,longitude);
+        }
+        var len = Math.round(Math.sqrt((lat-mlat)**2+(lon-mlon)**2)*111*1000);
+        document.getElementById("distance").innerText = len+"m";
+    });
+    } else {
+    console.log("Geolocation is not supported by this browser.");
+    
+}
+        }
+        //lat = 60;
+        //lon = 20;
+        //name = "Hof"
+        setInterval(getGPS,2000);
+
+
     const compassCircle = document.querySelector(".compass-circle");
     const myPoint = document.querySelector(".my-point");
     const startBtn = document.querySelector(".start-btn");
