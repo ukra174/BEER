@@ -95,12 +95,11 @@
   <body>
     <h1 class="name" id="name">Searching...</h1>
     <div class="compass">
-      <div class="arrow"></div>
       <div class="compass-circle"></div>
       <div class="my-point"></div>
     </div>
     <h1 class="distance" id="distance">???m</h1>
-    <button class="start-btn">Start compass</button>
+    
   </body>
   <script>
 
@@ -210,13 +209,13 @@ var mlat = 0;
 
     const compassCircle = document.querySelector(".compass-circle");
     const myPoint = document.querySelector(".my-point");
-    const startBtn = document.querySelector(".start-btn");
+    //const startBtn = document.querySelector(".start-btn");
     const isIOS =
       navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
       navigator.userAgent.match(/AppleWebKit/);
 
     function init() {
-      startBtn.addEventListener("click", startCompass);
+      //startBtn.addEventListener("click", startCompass);
       navigator.geolocation.getCurrentPosition(locationHandler);
 
       if (!isIOS) {
