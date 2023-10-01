@@ -161,10 +161,10 @@ var mlat = 0;
             var min = 9999999999999;
             for(const biergarten of searchResults){
               console.log(biergarten);
-                var len = Math.sqrt(biergarten["lat"]**2+biergarten["lon"]**2);
+                var len = Math.sqrt(parseFloat(biergarten["lat"])**2+parseFloat(biergarten["lon"])**2);
                 if(len<min){
-                    lat = biergarten["lat"];
-                    lon = biergarten["lon"];
+                    lat = parseFloat(biergarten["lat"]);
+                    lon = parseFloat(biergarten["lon"]);
                     min = len;
                     name = biergarten["name"];
                 }
