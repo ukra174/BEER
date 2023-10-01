@@ -240,7 +240,7 @@ var mlat = 0;
 
     function handler(e) {
       compass = e.webkitCompassHeading || Math.abs(e.alpha - 360);
-      compassCircle.style.transform = `translate(-50%, -50%) rotate(${-compass}deg)`;
+      compassCircle.style.transform = `translate(-50%, -50%) rotate(${-compass+ calculateInitialBearing(mlat,mlon,lat,lon)}deg)`;
 
       // ±15 degree
       if (
@@ -259,7 +259,7 @@ var mlat = 0;
 
     function locationHandler(position) {
       const { latitude, longitude } = position.coords;
-      pointDegree = calcDegreeToPoint(latitude, longitude) + calculateInitialBearing(mlat,mlon,lat,lon);
+      pointDegree = calcDegreeToPoint(latitude, longitude);
 
       if (pointDegree < 0) {
         pointDegree = pointDegree + 360;
