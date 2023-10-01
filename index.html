@@ -160,7 +160,7 @@ var mlat = 0;
             var min = 9999999999999;
             for(const biergarten of searchResults){
               console.log(biergarten);
-                var len = Math.sqrt(parseFloat(biergarten["lat"])**2+parseFloat(biergarten["lon"])**2);
+                var len = Math.sqrt((mlat-parseFloat(biergarten["lat"]))**2+(mlon-parseFloat(biergarten["lon"]))**2);
                 if(len<min){
                     lat = parseFloat(biergarten["lat"]);
                     lon = parseFloat(biergarten["lon"]);
